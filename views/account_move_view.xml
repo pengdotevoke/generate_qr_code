@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_move_form_qr" model="ir.ui.view">
+        <field name="name">account.move.form.qr</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Add the fields in the main form -->
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <group>
+                    <field name="job_card"/>
+                    <field name="lpo_number"/>
+                </group>
+            </xpath>
+
+            <!-- Add the QR code in the header if desired -->
+            <xpath expr="//header" position="inside">
+                <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

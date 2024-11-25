@@ -1,0 +1,156 @@
+<div style="font-family:roboto">
+<table align="centre" style="width:100%; font-size:18px;" class="table">
+    <tbody>
+         <colgroup>
+                <col width = "40%"/>
+                 <col width = "20%"/>
+                <col width = "40%"/>
+        </colgroup>
+        <tr><td><img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/></td>
+        <td></td>
+        <td style="text-align:right"> <t t-esc="res_company.street"/><br/>
+        <t t-esc="res_company.street2"/> | <t t-esc="res_company.city"/><br/>
+       Tel: <t t-esc="res_company.phone"/> |  Email :<t t-esc="res_company.email"/><br/>
+       PIN:  <t t-esc="res_company.vat"/><br/></td></tr>
+    </tbody>
+</table>
+<br/>
+<br/>
+    <center><h1 style ="color:#313c8d">INVOICE</h1></center>
+    
+   <strong><p style="text-align:right">Invoice No. <br/> <t t-esc="invoice.name"/></p></strong>
+   <br/>
+   <span>
+       <strong>SOLD TO</strong><br/>
+       <t t-esc="invoice.partner_id.name"/><br/>
+       <t t-esc="invoice.partner_id.city"/><br/>
+       <t t-esc="invoice.partner_id.vat"/><br/>
+   </span>
+   <br/>
+   <br/>
+   <table align="centre" style="width:100%; font-size:18px; border: 1px solid black; border-color: #deeaf6;" class="table">
+       <thead style="background-color: #deeaf6;font-weight:bold;">
+           <tr>
+               <t t-if="invoice.invoice_payment_term_id"><td>Invoice Date</td> 
+               <td>Payment Terms</td>
+               <td>Due Date</td> </t>
+               <t t-else=""><td>Invoice Date</td> 
+               <td>Due Date</td> </t>
+           </tr>
+       </thead>
+       <tbody >
+           
+               <t t-if="invoice.job_card">
+                    <p><strong>Job Card:</strong> <span t-esc="invoice.job_card"/></p>
+                </t>
+                
+                <t t-if="invoice.lpo_number">
+                    <p><strong>LPO Number:</strong> <span t-esc="invoice.lpo_number"/></p>
+                </t>
+           <colgroup>
+                
+               <t t-if="invoice.invoice_payment_term_id"><col width = "30%"/> <col width = "40%"/> <col width = "30%"/></t>
+               <t t-else=""><col width = "50%"/> <col width = "50%"/></t> 
+            </colgroup>
+           <tr>
+               <t t-if="invoice.invoice_payment_term_id">
+                <td><t t-esc="invoice.invoice_date"/></td>
+               <td><t t-esc="invoice.invoice_payment_term_id.name"/></td>
+               <td><t t-esc="invoice.invoice_date_due"/></td>
+               </t>
+               
+               <t t-else="">
+                   <td><t t-esc="invoice.invoice_date"/></td>
+                   <td><t t-esc="invoice.invoice_date_due"/></td>
+                   </t>
+           </tr>
+       </tbody>
+   </table>
+    <br/>
+    <table align="centre" style="width:100%; font-size:18px; border: 1px solid black; border-color: #deeaf6;" class="table">
+        <thead style="background-color: #deeaf6;font-weight:bold;">
+            <tr>
+                <th>#</th>
+                <th>Product Desc</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Tax</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <colgroup>
+                <col width = "5%"/>
+                <col width = "50%"/>
+                <col width = "5%"/>
+                <col width = "15%"/>
+                 <col width = "10%"/>
+                <col width = "15%"/>
+            </colgroup>
+            <t t-set="counter" t-value="1"/>
+            <t t-foreach="invoice.invoice_line_ids" t-as="line">
+                <tr align="center">
+                    <td>
+                        <t t-esc="counter"/>
+                    </td>
+                    <td style = "text-align:left">
+                        <t t-esc="line.product_id.name"/>
+                    </td>
+                    <td>
+                        <t t-esc="line.quantity"/>
+                    </td>
+                    <td>
+                       Ksh. <t t-esc="line.price_unit"/>
+                    </td>
+                    <td>
+                        <t t-esc="line.tax_ids.name"/>
+                    </td>
+                    <td>
+                        Ksh. <t t-esc="line.price_subtotal"/>
+                    </td>.
+                    <t t-set="counter" t-value="counter+1"/>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+    <br/>
+    
+    <table align="centre" style="width:100%; font-size:18px;" class="table">
+    <tbody>
+         <colgroup>
+                <col width = "50%"/>
+                <col width = "50%"/>
+        </colgroup>
+        <tr><td></td>
+        <td style="text-align:right"> <span style="float:right;">
+            Total Taxable Amount: Ksh. <t t-esc="invoice.amount_untaxed"/>
+        <br/><br/>
+        VAT(16%): Ksh. <t t-esc="invoice.amount_tax"/>
+        <br/>
+        <br/>
+    
+       <span style="font-weight:bold;"> TOTAL AMOUNT: Ksh. <t t-esc="invoice.amount_total"/></span>
+        <br/><br/>
+          <span style= "color:#313c8d; font-weight:bold">  Balance Due: Ksh. <t t-esc="invoice.amount_residual"/></span>
+        <br/>
+        </span>
+        <br/> </td></tr>
+        <tr><td>  <span style="float:left;">
+            Account Name: <t t-esc="invoice.partner_bank_id.bank_id.name"/> <br/>
+            KES Account Number: <t t-esc="invoice.partner_bank_id.acc_number"/> <br/>
+            Branch Code:<t t-esc="invoice.partner_bank_id.bank_id.bic"/> <br/><br/>
+            M-PESA Paybill: <strong>601690</strong> <br/> Account No: <strong><t t-esc="invoice.name"/></strong> <br/>
+            <span>QR Code Placeholder</span><br/>
+            <t t-if="invoice.qr_code">
+                 <img t-att-src="'data:image/png;base64,%s' % invoice.qr_code.decode('utf-8')" style="width:150px; height:150px;"/>
+            </t>
+            
+            <br/><br/>
+            Received By:......................................
+    </span>
+    </td><td></td></tr>
+    </tbody>
+</table>
+  
+</div>
+          
